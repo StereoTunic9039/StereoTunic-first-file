@@ -1,43 +1,79 @@
 let NumberPlayers
-let r; let k; let c;
+let r; let k; let Cc = 0;
 let x; let y; let z;
 let Mazzo = []
 for (let i=0; i<52; i++){
   Mazzo[i] = i;
 }
+for (let i=0; i<52; i++){
+  r = (Math.floor(Math.random() * (52-i)+i));
+  k = Mazzo[i];
+  Mazzo[i] = Mazzo[r];
+  Mazzo[r] = k;
+  }
+let Seme = ["Fiori", "Cuori", "Picche", "Quadri"]
+let Numero = ["Due", "Tre", "Quattro", "Cinque", "Sei", "Sette", "Otto", "Nove", "Dieci", "Fante", "Donna", "Re", "Asso"]
+
 
 function AssignNumberPlayers (){
   NumberPlayers = document.getElementById("NPlayers").value
-  console.log(NumberPlayers)
 
   let Rimozione = document.getElementById("divAskNPlayers")
   Rimozione.remove()
 
-  for (let i=0; i<52; i++){
-    r = (Math.floor(Math.random() * (52-i)+i));
-    k = Mazzo[i];
-    Mazzo[i] = Mazzo[r];
-    Mazzo[r] = k;
+  let DivMain = document.createElement("div")
+  DivMain.id="DivMain"
+
+  for(let i=0; i<NumberPlayers; i++){
+    let br = document.createElement("br")
+    let DivMostraMano = document.createElement("div")
+    let Carta = document.createElement("p")
+
+    let TestoCarta1 = document.createTextNode("Prima carta: " + Numero[Mazzo[Cc]%13] + " a " + Seme[(Math.floor(Mazzo[Cc]/13))])
+    let TestoCarta2 = document.createTextNode("Seconda carta: " + Numero[Mazzo[Cc+1]%13] + " a " + Seme[(Math.floor(Mazzo[Cc+1]/13))])
+
+    Carta.appendChild(TestoCarta1); Carta.appendChild(br); Carta.appendChild(TestoCarta2); 
+
+    DivMostraMano.appendChild(Carta)
+
+    DivMain.appendChild(DivMostraMano);
+
+    Cc += 2
   }
+  let br = document.createElement("br"); let br1 = document.createElement("br")
+  
+  let TestoGoBack = document.createTextNode("Go back")
+  let GoBack = document.createElement("button")
+  GoBack.type = "button"
+  GoBack.onclick = function (){GoBackF()}
+  GoBack.appendChild(TestoGoBack); 
 
-  let DivMostraMano = document.createElement("div")
-  let Carta = document.createElement("p")
+  let TestoSubmit = document.createTextNode("Submit")
   let Submit = document.createElement("button")
-
-  let TestoCarta = document.createTextNode(Mazzo[0])
-  let TestoSubmit = document.createTextNode("Go back")
-
   Submit.type = "button"
-  Submit.onclick = function (){GoBack()}
+  Submit.onclick = function (){SubmitF()}
+  Submit.appendChild(TestoSubmit); 
 
-  Submit.appendChild(TestoSubmit); Carta.appendChild(TestoCarta)
-  DivMostraMano.appendChild(Carta); DivMostraMano.appendChild(Submit)
+  DivMain.appendChild(GoBack)
+  DivMain.appendChild(br); DivMain.appendChild(br1)
+  DivMain.appendChild(Submit)
 
-  document.body.insertBefore(DivMostraMano, null)
-  console.log(Mazzo)
+  document.body.insertBefore(DivMain, null)
 }
 
-function GoBack (){
+function GoBackF (){
   location.reload()
+}
+
+function SubmitF (){
+  let DivMain = document.getElementById("DivMain")
+  let TestoTavolo = document.createTextNode("Tavolo: " + Numero[Mazzo[Cc]%13] + " a " + Seme[(Math.floor(Mazzo[Cc]/13))] + ", " + Numero[Mazzo[Cc+1]%13] + " a " + Seme[(Math.floor(Mazzo[Cc+1]/13))] + ", " + Numero[Mazzo[Cc+2]%13] + " a " + Seme[(Math.floor(Mazzo[Cc+2]/13))])
+  let Tavolo = document.createElement("p")
+  let DivTavolo = document.createElement("div")
+
+  Tavolo.appendChild(TestoTavolo)
+  DivTavolo.appendChild(Tavolo)
+
+  DivMain.insertBefore(DivTavolo, null)
 }
 
